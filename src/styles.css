@@ -1,0 +1,8 @@
+.App {
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+}
+.stocks-search {
+  display: grid;
+  grid-template-columns: 90% 10%;
+}
