@@ -1,6 +1,9 @@
 import axios from "axios";
-import { BASE_URL, KEY2 } from "./constants";
+import { BASE_URL, KEY2, KEY, KEY3 } from "./constants";
 
 export const fetch = (fn: string, otherQueryParams: string) => {
-  return axios.get(`${BASE_URL}${fn}${otherQueryParams}${KEY2}`);
+  return axios
+    .get(`${BASE_URL}${fn}${otherQueryParams}${KEY2}`)
+    .then((resp) => resp.data)
+    .catch((err) => err);
 };

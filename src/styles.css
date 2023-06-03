@@ -5,4 +5,20 @@
 .stocks-search {
   display: grid;
   grid-template-columns: 90% 10%;
+  width: 80%;
+  margin: 1rem auto;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  padding: 1rem;
+}
+.align-left {
+  text-align: left;
+}
+
+.stock-details {
+  display: grid;
+  grid-template-columns: 50% 50%;
 }
