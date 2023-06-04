@@ -23,12 +23,13 @@ export const transformStockIntradayForChart = (
   // considering markets are closed on saturday and sunday
   if (currentDay.getDay() == 6) {
     daysToSubtract = 1;
-  } else if (currentDay.getDay() == 7) {
-    daysToSubtract = 1;
+  } else if (currentDay.getDay() == 0) {
+    daysToSubtract = 2;
   }
   for (let i = 0; i < intraDayTimeKeys.length; i++) {
     let timeKey = intraDayTimeKeys[i];
     let readingTime = new Date(timeKey);
+    console.log(currentDay.getDate(), daysToSubtract, readingTime.getDate());
     console.log(currentDay.getDate(), daysToSubtract, readingTime.getDate());
     if (currentDay.getDate() - daysToSubtract == readingTime.getDate()) {
       todaysData.push({
@@ -37,6 +38,7 @@ export const transformStockIntradayForChart = (
       });
     }
   }
+  console.log(todaysData);
 
   const labels = todaysData.map((data) => data.date);
   const data = todaysData.map((data) => data["4. close"]);

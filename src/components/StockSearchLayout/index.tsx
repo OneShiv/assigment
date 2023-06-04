@@ -21,31 +21,26 @@ function StocksSearchLayout() {
   const [inputValue, setInputValue] = React.useState<string>("");
   const [stocksList, setStocksList] = React.useState<Stock[]>([]);
 
-  const deboundecInpValue = useDebounce(inputValue, 300);
+  const debouncedInputValue = useDebounce(inputValue, 300);
+  console.log(debouncedInputValue);
 
   const navigate = useNavigate();
   console.log(stocksList);
 
   React.useEffect(() => {
-    if (deboundecInpValue.length >= 3) {
-      fetch(GET_MATCHING_STOCKS, `&keywords=${deboundecInpValue}`).then(
+    if (debouncedInputValue.length >= 2) {
+      fetch(GET_MATCHING_STOCKS, `&keywords=${debouncedInputValue}`).then(
         (resp: StockSearchResponse) => {
           setStocksList(resp.bestMatches);
         }
       );
     }
-  }, [deboundecInpValue]);
+  }, [debouncedInputValue]);
 
   const transformedStocks = stocksDataTransformer(stocksList);
 
-  const onChangeHandler = (event: any, newValue: any) => {
-    setValue(newValue);
-    if (newValue) {
-      const id = newValue.symbol;
-      setValue(null);
-      setInputValue("");
-      navigate(`/${id}`);
-    }
+  const onChangeHandler = (newValue: string) => {
+    setInputValue(newValue);
   };
 
   return (
@@ -69,7 +64,7 @@ function StocksSearchLayout() {
           /> */}
           <MyAutoComplete
             options={transformedStocks}
-            onChange={(val) => setInputValue(val)}
+            onChange={onChangeHandler}
             label="Find a Symbol"
             setSelectedValue={(value) => {
               console.log(value);

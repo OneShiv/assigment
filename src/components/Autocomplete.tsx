@@ -4,6 +4,7 @@ import { List } from "react-virtualized";
 import IconButton from "@mui/material/IconButton";
 import Search from "@mui/icons-material/Search";
 import "react-virtualized/styles.css";
+import { setOptions } from "react-chartjs-2/dist/utils";
 
 type AutoCompleteProps = {
   label: string;
@@ -65,35 +66,15 @@ function AutoComplete(props: AutoCompleteProps) {
   };
 
   const onBlur = (e: FocusEvent<HTMLInputElement, Element>) => {
-    console.log("blue fired");
-    timeoutId = setTimeout(() => setShowOptions(false), 100);
     props.onBlur && props.onBlur(e);
+    timeoutId = setTimeout(() => setShowOptions(false), 1000);
   };
 
   const onFocus = (e: FocusEvent<HTMLInputElement, Element>) => {
+    clearTimeout(timeoutId);
     setShowOptions(true);
     props.onFocus && props.onFocus(e);
   };
-
-  function renderOption({ index, key, style }: any) {
-    return (
-      <li
-        tabIndex={-1}
-        id={props.options[index].label}
-        aria-selected="false"
-        data-option-value={props.options[index].symbol}
-        key={key}
-        role="option"
-        className={optionIndex === index ? "active" : "inactive"}
-        onClick={() => {
-          console.log("clicked", index);
-          props.setSelectedValue(props.options[index]);
-        }}
-      >
-        {props.options[index].label}
-      </li>
-    );
-  }
 
   return (
     <section className="autocomplete-field">
@@ -140,18 +121,26 @@ function AutoComplete(props: AutoCompleteProps) {
             ref={listRef as any}
             tabIndex={-1}
           >
-            {showOptions && (
-              <List
-                height={300}
-                width={listRef?.current?.clientWidth || 300}
-                rowHeight={25}
-                rowCount={props.options.length}
-                rowRenderer={renderOption}
-                containerStyle={{
-                  overflow: "scroll",
-                }}
-              />
-            )}
+            {showOptions &&
+              props.options.map((option, index) => {
+                return (
+                  <li
+                    tabIndex={-1}
+                    id={option.label}
+                    aria-selected="false"
+                    data-option-value={option.symbol}
+                    key={option.label}
+                    role="option"
+                    className={optionIndex === index ? "active" : "inactive"}
+                    onClick={() => {
+                      console.log("clicked", index);
+                      props.setSelectedValue(props.options[index]);
+                    }}
+                  >
+                    {props.options[index].label}
+                  </li>
+                );
+              })}
           </ul>
         </form>
       </div>

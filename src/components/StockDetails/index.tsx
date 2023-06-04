@@ -47,9 +47,7 @@ function StockDetails() {
 
   const { labels, data: _data } =
     transformStockIntradayForChart(stockIntradayData);
-  console.log(stockIntradayData, globalQuoteData);
-
-  
+  console.log(stockIntradayData, globalQuoteData, labels, _data);
 
   if (getStocksLoading || stockIntradayDataLoading || globalQuoteLoading) {
     return <div>Loading ...</div>;
@@ -69,7 +67,7 @@ function StockDetails() {
         borderColor: "rgba(75,192,192,1)",
       },
       {
-        label: "legend1",
+        label: "previous closing",
         data: globalQuoteData
           ? new Array(_data.length).fill(
               globalQuoteData["Global Quote"]["08. previous close"]
