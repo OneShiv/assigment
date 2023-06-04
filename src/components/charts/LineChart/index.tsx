@@ -24,7 +24,7 @@ ChartJS.register(
 function LineChart({ data }: { data: LineChartData }) {
   return (
     <div className="chart-wrapper">
-      <Line data={data} data-testid="line-chart" width={1000} />
+      <Line data={data} data-testid="line-chart" />
     </div>
   );
 }

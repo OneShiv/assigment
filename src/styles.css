@@ -67,7 +67,7 @@ h2 {
   flex: 1;
 }
 .label-value-row div:nth-of-type(2) {
-  flex: 2;
+  flex: 3;
 }
 
 /* Stock details start*/
