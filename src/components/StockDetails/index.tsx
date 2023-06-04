@@ -1,3 +1,4 @@
+import React from "react";
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
 import {
@@ -12,9 +13,27 @@ import { StockOverview, IntraDayResponse, GlobalQuoteResp } from "./types";
 import StockLineChart from "../StockLineChart";
 import LabelValue from "../LabelValue";
 import { LineChartData } from "../StockLineChart/types";
+import { IconButton } from "@mui/material";
+import Refresh from "@mui/icons-material/Refresh";
+import Stop from "@mui/icons-material/Stop";
 
 function StockDetails() {
   const params = useParams();
+  const [refreshInterval, setRefreshInterval] = React.useState(0);
+  const [isAutoRefreshOn, setAutoRefreshOn] = React.useState(false);
+
+  const fetchMetrics = () => {
+    // retrieve and then setData()
+    console.log("Hello World");
+  };
+
+  React.useEffect(() => {
+    if (isAutoRefreshOn && refreshInterval && refreshInterval > 0) {
+      const interval = setInterval(fetchMetrics, refreshInterval);
+      return () => clearInterval(interval);
+    }
+  }, [refreshInterval, isAutoRefreshOn]);
+
   const {
     data: stockOverview,
     error: getStockError,
@@ -54,7 +73,11 @@ function StockDetails() {
   }
 
   if (getStocksLoading || stockIntradayData?.Note || globalQuoteData?.Note) {
-    return <div>API limit exhausted</div>;
+    return (
+      <div>
+        <p>API limit exhausted</p>
+      </div>
+    );
   }
   const data: LineChartData = {
     labels: labels.reverse(),
@@ -84,7 +107,9 @@ function StockDetails() {
     <section>
       {stockOverview && (
         <>
-          <h2>Stock Details</h2>
+          <div>
+            <h2>Stock Details</h2>
+          </div>
           <section className="stock-details">
             <section className="stock-details-data">
               <LabelValue label="Name" value={stockOverview.Name} />
@@ -118,6 +143,31 @@ function StockDetails() {
             </section>
             {stockIntradayData && globalQuoteData && (
               <section className="stock-chart">
+                <section className="refresh-data-inputs">
+                  <span>Refresh after(seconds)</span>
+                  <input
+                    type="number"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setRefreshInterval(+e.target.value * 1000)
+                    }
+                  />
+                  {!isAutoRefreshOn && (
+                    <IconButton
+                      color="primary"
+                      onClick={() => setAutoRefreshOn(true)}
+                    >
+                      <Refresh />
+                    </IconButton>
+                  )}
+                  {isAutoRefreshOn && (
+                    <IconButton
+                      color="primary"
+                      onClick={() => setAutoRefreshOn(false)}
+                    >
+                      <Stop />
+                    </IconButton>
+                  )}
+                </section>
                 <StockLineChart data={data} data-test-id="line-chart" />
               </section>
             )}

@@ -79,17 +79,6 @@ function AutoComplete(props: AutoCompleteProps) {
   return (
     <section className="autocomplete-field">
       <label htmlFor="search">{props.label}</label>
-      <select
-        name="search"
-        aria-hidden="true"
-        tabIndex={-1}
-        className="visually-hidden"
-      >
-        {showOptions &&
-          props.options.map((option) => {
-            return <option key={`opt-${option.label}`}>{option.label}</option>;
-          })}
-      </select>
       <div className="autocomplete">
         <form>
           <div className="input-btn-wrapper">

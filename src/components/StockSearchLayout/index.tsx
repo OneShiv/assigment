@@ -46,7 +46,7 @@ function StocksSearchLayout() {
   return (
     <>
       <section>
-        <h1>Stock Screener</h1>
+        <h1>Stocks Screener</h1>
         <section className="stocks-search">
           {/* <Autocomplete
             disablePortal
