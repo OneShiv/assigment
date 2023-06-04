@@ -1,26 +1,10 @@
 import React from "react";
-import { KeyboardEvent, ChangeEvent, FocusEvent } from "react";
+import { KeyboardEvent, FocusEvent, ChangeEvent } from "react";
 import { List } from "react-virtualized";
 import IconButton from "@mui/material/IconButton";
 import Search from "@mui/icons-material/Search";
 import "react-virtualized/styles.css";
-import { setOptions } from "react-chartjs-2/dist/utils";
-
-type AutoCompleteProps = {
-  label: string;
-  options: Option[];
-  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
-  onChange?: (value: string) => void;
-  onBlur?: (e: FocusEvent<HTMLInputElement, Element>) => void;
-  onFocus?: (e: FocusEvent<HTMLInputElement, Element>) => void;
-  setSelectedValue: (option: Option) => void;
-};
-
-type Option = {
-  symbol: string;
-  label: string;
-  id: string;
-};
+import { AutoCompleteProps, Option } from "./types";
 
 function AutoComplete(props: AutoCompleteProps) {
   const [showOptions, setShowOptions] = React.useState(false);
@@ -29,6 +13,7 @@ function AutoComplete(props: AutoCompleteProps) {
   const listRef = React.useRef<HTMLUListElement>();
 
   let timeoutId: NodeJS.Timeout;
+
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     console.log(e.key);
     switch (e.key) {
@@ -52,7 +37,7 @@ function AutoComplete(props: AutoCompleteProps) {
         e.preventDefault();
         if (optionIndex > -1) {
           props.onChange && props.onChange(props.options[optionIndex].symbol);
-          props.setSelectedValue(props.options[optionIndex]);
+          props.setSelectedValue(searchText);
           setShowOptions(false);
         }
       default:
@@ -60,9 +45,9 @@ function AutoComplete(props: AutoCompleteProps) {
     }
   };
 
-  const onChangeHandler = (e: any) => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
-    props.onChange && props.onChange(searchText);
+    props.onChange && props.onChange(e.target.value);
   };
 
   const onBlur = (e: FocusEvent<HTMLInputElement, Element>) => {
@@ -103,6 +88,9 @@ function AutoComplete(props: AutoCompleteProps) {
               <Search />
             </IconButton>
           </div>
+          {props.options.length === 0 && searchText !== "" && (
+            <div>No options try different search term</div>
+          )}
           <ul
             id="search-results"
             role="listbox"
@@ -123,7 +111,7 @@ function AutoComplete(props: AutoCompleteProps) {
                     className={optionIndex === index ? "active" : "inactive"}
                     onClick={() => {
                       console.log("clicked", index);
-                      props.setSelectedValue(props.options[index]);
+                      props.setSelectedValue(props.options[index].symbol);
                     }}
                   >
                     {props.options[index].label}

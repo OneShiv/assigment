@@ -16,23 +16,12 @@ import { LineChartData } from "../StockLineChart/types";
 import { IconButton } from "@mui/material";
 import Refresh from "@mui/icons-material/Refresh";
 import Stop from "@mui/icons-material/Stop";
+import Card from "../Card";
 
 function StockDetails() {
   const params = useParams();
   const [refreshInterval, setRefreshInterval] = React.useState(0);
   const [isAutoRefreshOn, setAutoRefreshOn] = React.useState(false);
-
-  const fetchMetrics = () => {
-    // retrieve and then setData()
-    console.log("Hello World");
-  };
-
-  React.useEffect(() => {
-    if (isAutoRefreshOn && refreshInterval && refreshInterval > 0) {
-      const interval = setInterval(fetchMetrics, refreshInterval);
-      return () => clearInterval(interval);
-    }
-  }, [refreshInterval, isAutoRefreshOn]);
 
   const {
     data: stockOverview,
@@ -42,6 +31,7 @@ function StockDetails() {
     params.id ? `${GET_STOCK_OVERVIEW}&symbol=${params.id}` : null,
     () => fetch(GET_STOCK_OVERVIEW, `&symbol=${params.id}`)
   );
+
   console.log(stockOverview);
 
   const {
@@ -52,8 +42,13 @@ function StockDetails() {
     params.id
       ? `${GET_STOCK_INTRADAY}${INTERVAL_ONE_HOUE}&symbol=${params.id}`
       : null,
-    () => fetch(GET_STOCK_INTRADAY, `${INTERVAL_ONE_HOUE}&symbol=${params.id}`)
+    () => fetch(GET_STOCK_INTRADAY, `${INTERVAL_ONE_HOUE}&symbol=${params.id}`),
+    refreshInterval && isAutoRefreshOn
+      ? { refreshInterval: refreshInterval }
+      : undefined
   );
+
+  console.log(stockIntradayData);
 
   const {
     data: globalQuoteData,
@@ -111,66 +106,70 @@ function StockDetails() {
             <h2>Stock Details</h2>
           </div>
           <section className="stock-details">
-            <section className="stock-details-data">
-              <LabelValue label="Name" value={stockOverview.Name} />
-              <LabelValue label="Symbol" value={stockOverview.Symbol} />
-              <LabelValue
-                label="Description"
-                value={stockOverview.Description}
-              />
-              <LabelValue
-                label="Current Price"
-                value={
-                  globalQuoteData
-                    ? globalQuoteData["Global Quote"]["05. price"]
-                    : "-"
-                }
-              />
-              <LabelValue
-                label="Change its traded on"
-                value={
-                  globalQuoteData
-                    ? globalQuoteData["Global Quote"]["09. change"]
-                    : "-"
-                }
-              />
-              <LabelValue label="Industry" value={stockOverview.Industry} />
-              <LabelValue label="PE ratio" value={stockOverview.PERatio} />
-              <LabelValue
-                label="Market Cap"
-                value={stockOverview.MarketCapitalization}
-              />
-            </section>
-            {stockIntradayData && globalQuoteData && (
-              <section className="stock-chart">
-                <section className="refresh-data-inputs">
-                  <span>Refresh after(seconds)</span>
-                  <input
-                    type="number"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setRefreshInterval(+e.target.value * 1000)
-                    }
-                  />
-                  {!isAutoRefreshOn && (
-                    <IconButton
-                      color="primary"
-                      onClick={() => setAutoRefreshOn(true)}
-                    >
-                      <Refresh />
-                    </IconButton>
-                  )}
-                  {isAutoRefreshOn && (
-                    <IconButton
-                      color="primary"
-                      onClick={() => setAutoRefreshOn(false)}
-                    >
-                      <Stop />
-                    </IconButton>
-                  )}
-                </section>
-                <StockLineChart data={data} data-test-id="line-chart" />
+            <Card>
+              <section className="stock-details-data">
+                <LabelValue label="Name" value={stockOverview.Name} />
+                <LabelValue label="Symbol" value={stockOverview.Symbol} />
+                <LabelValue
+                  label="Description"
+                  value={stockOverview.Description}
+                />
+                <LabelValue
+                  label="Current Price"
+                  value={
+                    globalQuoteData
+                      ? globalQuoteData["Global Quote"]["05. price"]
+                      : "-"
+                  }
+                />
+                <LabelValue
+                  label="Change its traded on"
+                  value={
+                    globalQuoteData
+                      ? globalQuoteData["Global Quote"]["09. change"]
+                      : "-"
+                  }
+                />
+                <LabelValue label="Industry" value={stockOverview.Industry} />
+                <LabelValue label="PE ratio" value={stockOverview.PERatio} />
+                <LabelValue
+                  label="Market Cap"
+                  value={stockOverview.MarketCapitalization}
+                />
               </section>
-            )}
+            </Card>
+            <Card>
+              {stockIntradayData && globalQuoteData && (
+                <section className="stock-chart">
+                  <section className="refresh-data-inputs">
+                    <span>Refresh after(seconds)</span>
+                    <input
+                      type="number"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setRefreshInterval(+e.target.value * 1000)
+                      }
+                    />
+                    {!isAutoRefreshOn && (
+                      <IconButton
+                        color="primary"
+                        onClick={() => setAutoRefreshOn(true)}
+                      >
+                        <Refresh />
+                      </IconButton>
+                    )}
+                    {isAutoRefreshOn && (
+                      <IconButton
+                        color="primary"
+                        onClick={() => setAutoRefreshOn(false)}
+                      >
+                        <Stop />
+                      </IconButton>
+                    )}
+                  </section>
+                  <StockLineChart data={data} data-test-id="line-chart" />
+                </section>
+              )}
+            </Card>
           </section>
         </>
       )}
