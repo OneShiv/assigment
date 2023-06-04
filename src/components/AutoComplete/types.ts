@@ -1,4 +1,5 @@
 import { KeyboardEvent, FocusEvent } from "react";
+
 export type AutoCompleteProps = {
   label: string;
   options: Option[];

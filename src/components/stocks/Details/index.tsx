@@ -6,17 +6,17 @@ import {
   GET_STOCK_OVERVIEW,
   GET_STOCK_INTRADAY,
   INTERVAL_ONE_HOUE,
-} from "../../api/constants";
-import { transformStockIntradayForChart } from "../../utils";
-import { fetch } from "../../api";
-import { StockOverview, IntraDayResponse, GlobalQuoteResp } from "./types";
-import StockLineChart from "../StockLineChart";
-import LabelValue from "../LabelValue";
-import { LineChartData } from "../StockLineChart/types";
+} from "../../../api/constants";
+import { transformStockIntradayForChart } from "../../../utils";
+import { fetch } from "../../../api";
 import { IconButton } from "@mui/material";
 import Refresh from "@mui/icons-material/Refresh";
 import Stop from "@mui/icons-material/Stop";
-import Card from "../Card";
+import { GlobalQuoteResp, IntraDayResponse, StockOverview } from "./types";
+import { LineChartData } from "../../charts/LineChart/types";
+import LabelValue from "../../common/LabelValue";
+import LineChart from "../../charts/LineChart";
+import Card from "../../common/Card";
 
 function StockDetails() {
   const params = useParams();
@@ -99,77 +99,78 @@ function StockDetails() {
   };
 
   return (
-    <section>
+    <Card>
       {stockOverview && (
         <>
-          <div>
-            <h2>Stock Details</h2>
+          <div className="stock-heading">
+            <h2>
+              {stockOverview.Name} ({stockOverview.Symbol})
+            </h2>
+            <p>{stockOverview.Description}</p>
           </div>
-          <section className="stock-details">
-            <Card>
-              <section className="stock-details-data">
-                <LabelValue label="Name" value={stockOverview.Name} />
-                <LabelValue label="Symbol" value={stockOverview.Symbol} />
-                <LabelValue
-                  label="Description"
-                  value={stockOverview.Description}
-                />
-                <LabelValue
-                  label="Current Price"
-                  value={
-                    globalQuoteData
-                      ? globalQuoteData["Global Quote"]["05. price"]
-                      : "-"
-                  }
-                />
-                <LabelValue
-                  label="Change its traded on"
-                  value={
-                    globalQuoteData
-                      ? globalQuoteData["Global Quote"]["09. change"]
-                      : "-"
-                  }
-                />
-                <LabelValue label="Industry" value={stockOverview.Industry} />
-                <LabelValue label="PE ratio" value={stockOverview.PERatio} />
-                <LabelValue
-                  label="Market Cap"
-                  value={stockOverview.MarketCapitalization}
-                />
+          {stockIntradayData && globalQuoteData && (
+            <section className="stock-chart">
+              <section className="refresh-data">
+                <div className="inputs">
+                  <span>Refresh after(sec):</span>
+                  <input
+                    className="refresh-interval-input"
+                    type="number"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setRefreshInterval(+e.target.value * 1000)
+                    }
+                  />
+                  {!isAutoRefreshOn && (
+                    <IconButton
+                      color="primary"
+                      onClick={() => setAutoRefreshOn(true)}
+                    >
+                      <Refresh />
+                    </IconButton>
+                  )}
+                  {isAutoRefreshOn && (
+                    <IconButton
+                      color="primary"
+                      onClick={() => setAutoRefreshOn(false)}
+                    >
+                      <Stop />
+                    </IconButton>
+                  )}
+                </div>
+                <p>
+                  <em>
+                    Chart Last Sync :
+                    {stockIntradayData["Meta Data"]["3. Last Refreshed"]}
+                  </em>
+                </p>
               </section>
-            </Card>
-            <Card>
-              {stockIntradayData && globalQuoteData && (
-                <section className="stock-chart">
-                  <section className="refresh-data-inputs">
-                    <span>Refresh after(seconds)</span>
-                    <input
-                      type="number"
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setRefreshInterval(+e.target.value * 1000)
-                      }
-                    />
-                    {!isAutoRefreshOn && (
-                      <IconButton
-                        color="primary"
-                        onClick={() => setAutoRefreshOn(true)}
-                      >
-                        <Refresh />
-                      </IconButton>
-                    )}
-                    {isAutoRefreshOn && (
-                      <IconButton
-                        color="primary"
-                        onClick={() => setAutoRefreshOn(false)}
-                      >
-                        <Stop />
-                      </IconButton>
-                    )}
-                  </section>
-                  <StockLineChart data={data} data-test-id="line-chart" />
-                </section>
-              )}
-            </Card>
+              <LineChart data={data} data-test-id="line-chart" />
+            </section>
+          )}
+          <h3>More Details :</h3>
+          <section className="stock-details-data">
+            <LabelValue
+              label="Current Price"
+              value={
+                globalQuoteData
+                  ? `$${globalQuoteData["Global Quote"]["05. price"]}`
+                  : "-"
+              }
+            />
+            <LabelValue
+              label="Change its traded on"
+              value={
+                globalQuoteData
+                  ? globalQuoteData["Global Quote"]["09. change"]
+                  : "-"
+              }
+            />
+            <LabelValue label="Industry" value={stockOverview.Industry} />
+            <LabelValue label="PE ratio" value={stockOverview.PERatio} />
+            <LabelValue
+              label="Market Cap"
+              value={stockOverview.MarketCapitalization}
+            />
           </section>
         </>
       )}
@@ -179,7 +180,7 @@ function StockDetails() {
           <p>please try after some time or with another symbol search</p>
         </section>
       )}
-    </section>
+    </Card>
   );
 }
 

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import AutoComplete from "../AutoComplete";
-import { fetch } from "../../api";
-import { GET_MATCHING_STOCKS } from "../../api/constants";
-import { useDebounce } from "../../hooks/useDebounce";
-import { stocksDataTransformer } from "../../utils";
+import AutoComplete from "../../AutoComplete";
+import { fetch } from "../../../api";
+import { GET_MATCHING_STOCKS } from "../../../api/constants";
+import { useDebounce } from "../../../hooks/useDebounce";
+import { stocksDataTransformer } from "../../../utils";
 import { Stock, StockSearchResponse } from "./types";
 
 function StocksSearchLayout() {

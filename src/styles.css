@@ -36,12 +36,19 @@ h2 {
   margin-top: 1rem;
 }
 
+.refresh-interval-input {
+  border: 0;
+  border-bottom: 1px solid black;
+  padding: 0.875rem;
+  width: 4rem;
+}
+
 /* BASE SETUP ENDS*/
 
 /* Layout Start */
 
 .stocks-search {
-  margin-top: 1rem;
+  margin: 2rem 0;
 }
 
 /* Layout Ends */
@@ -69,9 +76,20 @@ h2 {
   flex-direction: column;
   margin-top: 1.5rem;
 }
-
-.refresh-data-inputs {
+.refresh-data {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+}
+.refresh-data p,
+.inputs {
+  align-self: flex-end;
+}
+.refresh-data .inputs {
+  display: flex;
   margin-bottom: 1rem;
+  align-items: flex-end;
+  gap: 0.2rem;
 }
 .stock-details .card:first-of-type {
   order: 1;
@@ -81,6 +99,29 @@ h2 {
   order: 0;
 }
 
+.stock-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stock-chart .refresh-data-inputs {
+  align-self: flex-end;
+}
+
+.stock-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stock-details-data {
+  border: 1px solid black;
+}
+.card h3 {
+  text-align: left;
+  margin-top: 2rem;
+}
 @media only screen and (min-width: 768px) {
   .stock-details {
     display: grid;
@@ -92,13 +133,6 @@ h2 {
     grid-template-columns: 20% 80%;
     padding: 1rem;
   }
-  .stock-details .card:first-of-type {
-    order: 0;
-  }
-
-  .stock-details .card:nth-of-type(2) {
-    order: 1;
-  }
 }
 /* stock details end */
 
@@ -107,7 +141,7 @@ h2 {
   margin-top: 0.5rem;
 }
 
-.autocomplete-field {
+.autocomplete {
   text-align: left;
 }
 
@@ -115,42 +149,44 @@ h2 {
   padding: 0.5rem;
   font-size: 1rem;
   width: 100%;
-  border-radius: none;
-  float: left;
+  border-radius: 0;
 }
-.autocomplete .input-btn-wrapper {
+
+.autocomplete .input-with-searchbtn {
   display: flex;
+  margin-top: 0.25rem;
 }
+
 .autocomplete button {
   border-radius: 0;
   width: 3rem;
   background-color: #009dcf;
   color: white;
-  border-left: none;
-  float: left;
+  border-left: 0;
 }
 .autocomplete button:hover {
   background-color: #039dae;
 }
-.autocomplete-field {
+.autocomplete {
   min-width: 7rem;
   width: 100%;
   text-align: left;
   padding: 0 0.5rem;
 }
-.autocomplete-field ul {
+.autocomplete ul {
   margin-top: 0.5rem;
   display: flex;
   flex-direction: column;
   max-height: 18.75rem;
   overflow-y: scroll;
+  box-shadow: 2px 2px 2px #d9d8d8;
 }
-.autocomplete-field ul li {
+.autocomplete ul li {
   list-style-type: none;
   padding: 0.5rem 0.25rem;
   cursor: pointer;
 }
-.autocomplete-field ul li:hover {
+.autocomplete ul li:hover {
   background-color: #039dae;
 }
 
@@ -166,7 +202,18 @@ h2 {
 
 /* Card Component Start*/
 .card {
+  padding: 1rem 2rem;
   border: 1px solid #ecedef;
-  filter: drop-shadow(2px 2px 2px #b0b2ba);
+  box-shadow: 4px 4px 2px #b0b2ba;
+  margin: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 /* Card component End*/
+
+.chart-wrapper {
+  min-width: 300px;
+  max-width: 1000px;
+  margin: auto;
+}

@@ -1,8 +1,8 @@
 import {
   IntraDayResponse,
   StockSeries,
-} from "../components/StockDetails/types";
-import { Stock } from "../components/StockSearchLayout/types";
+} from "../components/stocks/Details/types";
+import { Stock } from "../components/stocks/SearchLayout/types";
 
 export const transformStockIntradayForChart = (
   intraDayDataResp: IntraDayResponse | undefined
@@ -29,8 +29,6 @@ export const transformStockIntradayForChart = (
   for (let i = 0; i < intraDayTimeKeys.length; i++) {
     let timeKey = intraDayTimeKeys[i];
     let readingTime = new Date(timeKey);
-    console.log(currentDay.getDate(), daysToSubtract, readingTime.getDate());
-    console.log(currentDay.getDate(), daysToSubtract, readingTime.getDate());
     if (currentDay.getDate() - daysToSubtract == readingTime.getDate()) {
       todaysData.push({
         ...intraDayData[timeKey],
@@ -38,7 +36,6 @@ export const transformStockIntradayForChart = (
       });
     }
   }
-  console.log(todaysData);
 
   const labels = todaysData.map((data) => data.date);
   const data = todaysData.map((data) => data["4. close"]);

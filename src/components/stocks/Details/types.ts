@@ -41,5 +41,8 @@ export type StockSeries = {
 
 export type IntraDayResponse = {
   Note?: string;
+  "Meta Data": {
+    "3. Last Refreshed": string;
+  };
   "Time Series (60min)": StockSeries;
 };

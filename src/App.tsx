@@ -1,7 +1,7 @@
+import StockDetails from "./components/stocks/Details";
+import StocksSearchLayout from "./components/stocks/SearchLayout";
 import "./styles.css";
 import { Route, Routes } from "react-router-dom";
-import StocksSearchLayout from "./components/StockSearchLayout";
-import StockDetails from "./components/StockDetails";
 
 export default function App() {
   return (

@@ -1,45 +1,45 @@
-import React from "react";
-import { KeyboardEvent, FocusEvent, ChangeEvent } from "react";
-import { List } from "react-virtualized";
+import React, { KeyboardEvent, FocusEvent, ChangeEvent } from "react";
 import IconButton from "@mui/material/IconButton";
 import Search from "@mui/icons-material/Search";
-import "react-virtualized/styles.css";
-import { AutoCompleteProps, Option } from "./types";
+import { AutoCompleteProps } from "./types";
+import SearchOptions from "../common/SearchOptions";
+import { Keys } from "./constants";
 
 function AutoComplete(props: AutoCompleteProps) {
   const [showOptions, setShowOptions] = React.useState(false);
   const [optionIndex, setOptionIndex] = React.useState(-1);
   const [searchText, setSearchText] = React.useState("");
-  const listRef = React.useRef<HTMLUListElement>();
 
   let timeoutId: NodeJS.Timeout;
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    console.log(e.key);
     switch (e.key) {
-      case "Escape":
+      case Keys.ESCAPE:
         setShowOptions(false);
-      case "ArrowUp":
+      case Keys.ARROW_UP:
         if (optionIndex === 0) {
           setOptionIndex(props.options.length - 1);
         } else {
           setOptionIndex((prev) => prev - 1);
         }
         break;
-      case "ArrowDown":
+      case Keys.ARROW_DOWN:
         if (optionIndex >= props.options.length - 1) {
           setOptionIndex(0);
         } else {
           setOptionIndex((prev) => prev + 1);
         }
         break;
-      case "Enter":
+      case Keys.ENTER:
         e.preventDefault();
         if (optionIndex > -1) {
           props.onChange && props.onChange(props.options[optionIndex].symbol);
-          props.setSelectedValue(searchText);
+          props.setSelectedValue(props.options[optionIndex].symbol);
           setShowOptions(false);
+        } else {
+          props.setSelectedValue(searchText);
         }
+        setSearchText("");
       default:
         props.onKeyDown && props.onKeyDown(e);
     }
@@ -62,66 +62,42 @@ function AutoComplete(props: AutoCompleteProps) {
   };
 
   return (
-    <section className="autocomplete-field">
+    <form className="autocomplete">
       <label htmlFor="search">{props.label}</label>
-      <div className="autocomplete">
-        <form>
-          <div className="input-btn-wrapper">
-            <input
-              type="text"
-              autoComplete="off"
-              autoCapitalize="none"
-              id="search"
-              role="combobox"
-              aria-expanded={false}
-              aria-owns="search-results"
-              aria-autocomplete="list"
-              onKeyDown={onKeyDown}
-              onChange={onChangeHandler}
-              onBlur={onBlur}
-              onFocus={onFocus}
-              value={searchText}
-              className="search-input"
-              list="search-results"
-            />
-            <IconButton>
-              <Search />
-            </IconButton>
-          </div>
-          {props.options.length === 0 && searchText !== "" && (
-            <div>No options try different search term</div>
-          )}
-          <ul
-            id="search-results"
-            role="listbox"
-            className="hidden"
-            ref={listRef as any}
-            tabIndex={-1}
-          >
-            {showOptions &&
-              props.options.map((option, index) => {
-                return (
-                  <li
-                    tabIndex={-1}
-                    id={option.label}
-                    aria-selected="false"
-                    data-option-value={option.symbol}
-                    key={option.label}
-                    role="option"
-                    className={optionIndex === index ? "active" : "inactive"}
-                    onClick={() => {
-                      console.log("clicked", index);
-                      props.setSelectedValue(props.options[index].symbol);
-                    }}
-                  >
-                    {props.options[index].label}
-                  </li>
-                );
-              })}
-          </ul>
-        </form>
+      <div className="input-with-searchbtn">
+        <input
+          type="text"
+          autoComplete="off"
+          autoCapitalize="none"
+          id="search"
+          role="combobox"
+          aria-expanded={false}
+          aria-owns="search-results"
+          aria-autocomplete="list"
+          onKeyDown={onKeyDown}
+          onChange={onChangeHandler}
+          onBlur={onBlur}
+          onFocus={onFocus}
+          value={searchText}
+          className="search-input"
+          list="search-results"
+        />
+        <IconButton>
+          <Search />
+        </IconButton>
       </div>
-    </section>
+      {showOptions && (
+        <SearchOptions
+          noOptions={searchText !== "" && props.options.length === 0}
+          options={props.options}
+          optionIndex={optionIndex}
+          onClickHandler={(symbol: string) => {
+            props.setSelectedValue(symbol);
+            setSearchText("");
+          }}
+        />
+      )}
+    </form>
   );
 }
 
