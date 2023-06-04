@@ -54,7 +54,14 @@ describe("[Function : StocksDataTransformer]", () => {
 
 describe("[Function : transformStockIntradayForChart]", () => {
   it("should return empty array if intraday trades data is empty", () => {
-    expect(transformStockIntradayForChart({})).toEqual({
+    expect(
+      transformStockIntradayForChart({
+        "Meta Data": {
+          "3. Last Refreshed": "03-02-2023 00:00:00",
+        },
+        "Time Series (60min)": {},
+      })
+    ).toEqual({
       labels: [],
       data: [],
     });
@@ -67,26 +74,31 @@ describe("[Function : transformStockIntradayForChart]", () => {
     const d2 = new Date(Date.now() - 86400000);
     const d3 = new Date(Date.now() - 86400000 * 2);
     const originalData = {
-      [d1.toDateString()]: {
-        "1. open": "132.3000",
-        "2. high": "132.3000",
-        "3. low": "132.3000",
-        "4. close": "132.3000",
-        "5. volume": "252",
+      "Meta Data": {
+        "3. Last Refreshed": "03-02-2023 00:00:00",
       },
-      [d2.toDateString()]: {
-        "1. open": "132.3000",
-        "2. high": "132.3000",
-        "3. low": "132.3000",
-        "4. close": "132.3000",
-        "5. volume": "775",
-      },
-      [d3.toDateString()]: {
-        "1. open": "132.3000",
-        "2. high": "132.3000",
-        "3. low": "132.3000",
-        "4. close": "132.3000",
-        "5. volume": "926",
+      "Time Series (60min)": {
+        [d1.toDateString()]: {
+          "1. open": "132.3000",
+          "2. high": "132.3000",
+          "3. low": "132.3000",
+          "4. close": "132.3000",
+          "5. volume": "252",
+        },
+        [d2.toDateString()]: {
+          "1. open": "132.3000",
+          "2. high": "132.3000",
+          "3. low": "132.3000",
+          "4. close": "132.3000",
+          "5. volume": "775",
+        },
+        [d3.toDateString()]: {
+          "1. open": "132.3000",
+          "2. high": "132.3000",
+          "3. low": "132.3000",
+          "4. close": "132.3000",
+          "5. volume": "926",
+        },
       },
     };
     const expectedValue = transformStockIntradayForChart(originalData);

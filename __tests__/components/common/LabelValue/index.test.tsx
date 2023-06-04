@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import LabelValue from "../../../src/components/LabelValue";
+import LabelValue from "../../../../src/components/common/LabelValue";
 
 describe("[Component : LabelValue]", () => {
   it("should render label and value", () => {
