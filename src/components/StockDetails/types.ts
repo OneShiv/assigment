@@ -10,6 +10,7 @@ export type StockOverview = {
 };
 
 export type GlobalQuoteResp = {
+  Note?: string;
   ["Global Quote"]: GlobalQuote;
 };
 
@@ -39,5 +40,6 @@ export type StockSeries = {
 };
 
 export type IntraDayResponse = {
+  Note?: string;
   "Time Series (60min)": StockSeries;
 };

@@ -49,6 +49,15 @@ function StockDetails() {
     transformStockIntradayForChart(stockIntradayData);
   console.log(stockIntradayData, globalQuoteData);
 
+  
+
+  if (getStocksLoading || stockIntradayDataLoading || globalQuoteLoading) {
+    return <div>Loading ...</div>;
+  }
+
+  if (getStocksLoading || stockIntradayData?.Note || globalQuoteData?.Note) {
+    return <div>API limit exhausted</div>;
+  }
   const data: LineChartData = {
     labels: labels.reverse(),
     datasets: [
@@ -72,10 +81,6 @@ function StockDetails() {
       },
     ],
   };
-
-  if (getStocksLoading || stockIntradayDataLoading || globalQuoteLoading) {
-    return <div>Loading ...</div>;
-  }
 
   return (
     <section>

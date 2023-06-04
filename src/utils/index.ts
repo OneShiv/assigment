@@ -7,14 +7,14 @@ import { Stock } from "../components/StockSearchLayout/types";
 export const transformStockIntradayForChart = (
   intraDayDataResp: IntraDayResponse | undefined
 ) => {
-  if (!intraDayDataResp) {
+  const intraDayData =
+    intraDayDataResp && intraDayDataResp["Time Series (60min)"];
+  if (!intraDayDataResp || !intraDayData) {
     return {
       data: [],
       labels: [],
     };
   }
-  const intraDayData = intraDayDataResp["Time Series (60min)"];
-
   let intraDayTimeKeys = Object.keys(intraDayData);
   let todaysData = [];
   let currentDay = new Date();

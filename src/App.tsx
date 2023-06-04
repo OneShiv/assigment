@@ -2,7 +2,6 @@ import "./styles.css";
 import { Route, Routes } from "react-router-dom";
 import StocksSearchLayout from "./components/StockSearchLayout";
 import StockDetails from "./components/StockDetails";
-import AutoComplete from "./components/Autocomplete";
 import { useState } from "react";
 
 export default function App() {
@@ -52,20 +51,11 @@ export default function App() {
 
   return (
     <div className="App">
-      {/* <Routes>
+      <Routes>
         <Route path="/" element={<StocksSearchLayout />}>
           <Route path="/:id" element={<StockDetails />} />
         </Route>
-      </Routes> */}
-      <AutoComplete
-        label="Find Symbol"
-        options={options}
-        onKeyDown={onKeyDown}
-        onBlur={onBlur}
-        onChange={onChange}
-        value={searchText}
-        setSelectedValue={setSelectedValue}
-      />
+      </Routes>
     </div>
   );
 }

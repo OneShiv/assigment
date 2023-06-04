@@ -22,6 +22,7 @@ ChartJS.register(
 );
 
 function StockLineChart({ data }: { data: LineChartData }) {
+  console.log(data);
   return <Line data={data} data-testid="line-chart" />;
 }
 

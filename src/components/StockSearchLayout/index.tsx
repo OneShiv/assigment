@@ -1,6 +1,8 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import MyAutoComplete from "../Autocomplete";
+
 import IconButton from "@mui/material/IconButton";
 import Search from "@mui/icons-material/Search";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -51,7 +53,7 @@ function StocksSearchLayout() {
       <section>
         <h1>Stock Screener</h1>
         <section className="stocks-search">
-          <Autocomplete
+          {/* <Autocomplete
             disablePortal
             id="stock-search-ac"
             options={transformedStocks}
@@ -64,12 +66,19 @@ function StocksSearchLayout() {
             renderInput={(params) => {
               return <TextField {...params} label="Find a Symbol" />;
             }}
+          /> */}
+          <MyAutoComplete
+            options={transformedStocks}
+            onChange={(val) => setInputValue(val)}
+            label="Find a Symbol"
+            setSelectedValue={(value) => {
+              console.log(value);
+              setValue(value);
+              navigate(`/${value.symbol}`);
+            }}
           />
-          <IconButton>
-            <Search />
-          </IconButton>
-          <Outlet />
         </section>
+        <Outlet />
       </section>
     </>
   );
