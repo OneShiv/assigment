@@ -1,13 +1,19 @@
-import { StockSeries } from "../components/StockDetails/types";
+import {
+  IntraDayResponse,
+  StockSeries,
+} from "../components/StockDetails/types";
 import { Stock } from "../components/StockSearchLayout/types";
 
-export const transformStockIntradayForChart = (intraDayData: StockSeries) => {
-  if (!intraDayData) {
+export const transformStockIntradayForChart = (
+  intraDayDataResp: IntraDayResponse | undefined
+) => {
+  if (!intraDayDataResp) {
     return {
       data: [],
       labels: [],
     };
   }
+  const intraDayData = intraDayDataResp["Time Series (60min)"];
 
   let intraDayTimeKeys = Object.keys(intraDayData);
   let todaysData = [];

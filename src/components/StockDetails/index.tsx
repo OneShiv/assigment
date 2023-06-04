@@ -8,7 +8,7 @@ import {
 } from "../../api/constants";
 import { transformStockIntradayForChart } from "../../utils";
 import { fetch } from "../../api";
-import { StockOverview } from "./types";
+import { StockOverview, IntraDayResponse, GlobalQuoteResp } from "./types";
 import StockLineChart from "../StockLineChart";
 import LabelValue from "../LabelValue";
 import { LineChartData } from "../StockLineChart/types";
@@ -29,7 +29,7 @@ function StockDetails() {
     data: stockIntradayData,
     error: stockIntradayDataError,
     isLoading: stockIntradayDataLoading,
-  } = useSWR(
+  } = useSWR<IntraDayResponse, Error>(
     params.id
       ? `${GET_STOCK_INTRADAY}${INTERVAL_ONE_HOUE}&symbol=${params.id}`
       : null,
@@ -37,17 +37,17 @@ function StockDetails() {
   );
 
   const {
-    data: globalQuote,
+    data: globalQuoteData,
     error: globalQuoteError,
     isLoading: globalQuoteLoading,
-  } = useSWR(params.id ? `${GET_GLOBAL_QUOTE}&symbol=${params.id}` : null, () =>
-    fetch(GET_GLOBAL_QUOTE, `&symbol=${params.id}`)
+  } = useSWR<GlobalQuoteResp, Error>(
+    params.id ? `${GET_GLOBAL_QUOTE}&symbol=${params.id}` : null,
+    () => fetch(GET_GLOBAL_QUOTE, `&symbol=${params.id}`)
   );
 
   const { labels, data: _data } =
     transformStockIntradayForChart(stockIntradayData);
-
-  console.log(stockOverview, globalQuote, stockIntradayData);
+  console.log(stockIntradayData, globalQuoteData);
 
   const data: LineChartData = {
     labels: labels.reverse(),
@@ -61,8 +61,10 @@ function StockDetails() {
       },
       {
         label: "legend1",
-        data: globalQuote
-          ? new Array(_data.length).fill(globalQuote["08. previous close"])
+        data: globalQuoteData
+          ? new Array(_data.length).fill(
+              globalQuoteData["Global Quote"]["08. previous close"]
+            )
           : [],
         borderDash: [5],
         fill: true,
@@ -70,6 +72,10 @@ function StockDetails() {
       },
     ],
   };
+
+  if (getStocksLoading || stockIntradayDataLoading || globalQuoteLoading) {
+    return <div>Loading ...</div>;
+  }
 
   return (
     <section>
@@ -86,11 +92,19 @@ function StockDetails() {
               />
               <LabelValue
                 label="Current Price"
-                value={globalQuote ? globalQuote["05. price"] : "-"}
+                value={
+                  globalQuoteData
+                    ? globalQuoteData["Global Quote"]["05. price"]
+                    : "-"
+                }
               />
               <LabelValue
                 label="Change its traded on"
-                value={globalQuote ? globalQuote["09. change"] : "-"}
+                value={
+                  globalQuoteData
+                    ? globalQuoteData["Global Quote"]["09. change"]
+                    : "-"
+                }
               />
               <LabelValue label="Industry" value={stockOverview.Industry} />
               <LabelValue label="PE ratio" value={stockOverview.PERatio} />
@@ -99,7 +113,7 @@ function StockDetails() {
                 value={stockOverview.MarketCapitalization}
               />
             </section>
-            {stockIntradayData && globalQuote && (
+            {stockIntradayData && globalQuoteData && (
               <section className="stock-chart">
                 <StockLineChart data={data} data-test-id="line-chart" />
               </section>

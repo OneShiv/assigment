@@ -39,7 +39,10 @@ function StocksSearchLayout() {
   const onChangeHandler = (event: any, newValue: any) => {
     setValue(newValue);
     if (newValue) {
-      navigate(`/${newValue.symbol}`);
+      const id = newValue.symbol;
+      setValue(null);
+      setInputValue("");
+      navigate(`/${id}`);
     }
   };
 

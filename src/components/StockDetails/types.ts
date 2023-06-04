@@ -9,6 +9,10 @@ export type StockOverview = {
   MarketCapitalization: string;
 };
 
+export type GlobalQuoteResp = {
+  ["Global Quote"]: GlobalQuote;
+};
+
 export type GlobalQuote = {
   "01. symbol": string;
   "02. open": string;
