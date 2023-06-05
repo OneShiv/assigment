@@ -83,6 +83,7 @@ function StockDetails() {
     );
   }
 
+  console.log({ data: _data, labels });
   const data: LineChartData = {
     labels: labels.reverse(),
     datasets: [

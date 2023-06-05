@@ -9,36 +9,36 @@ export const transformStockIntradayForChart = (
 ) => {
   const intraDayData =
     intraDayDataResp && intraDayDataResp["Time Series (60min)"];
-  if (!intraDayDataResp || !intraDayData) {
+
+  if (
+    !intraDayDataResp ||
+    !intraDayData ||
+    Object.keys(intraDayData).length === 0
+  ) {
     return {
       data: [],
       labels: [],
     };
   }
-  let intraDayTimeKeys = Object.keys(intraDayData);
-  let todaysData = [];
-  let currentDay = new Date();
-  let daysToSubtract = 0;
-
-  // considering markets are closed on saturday and sunday
-  if (currentDay.getDay() == 6) {
-    daysToSubtract = 1;
-  } else if (currentDay.getDay() == 0) {
-    daysToSubtract = 2;
-  }
-  for (let i = 0; i < intraDayTimeKeys.length; i++) {
-    let timeKey = intraDayTimeKeys[i];
-    let readingTime = new Date(timeKey);
-    if (currentDay.getDate() - daysToSubtract == readingTime.getDate()) {
-      todaysData.push({
-        ...intraDayData[timeKey],
-        date: `${readingTime.getHours()}`,
-      });
+  let timelyData: StockSeries = intraDayData;
+  let timeKeys = Object.keys(timelyData);
+  let firstDateDay = new Date(timeKeys[0]).getDay();
+  let newTimeSeries: StockSeries = {};
+  newTimeSeries[timeKeys[0]] = timelyData[timeKeys[0]];
+  for (let i = 1; i < timeKeys.length; i++) {
+    let readingDate = new Date(timeKeys[i]).getDay();
+    if (firstDateDay != readingDate) {
+      break;
     }
+    newTimeSeries[timeKeys[i]] = timelyData[timeKeys[i]];
   }
 
-  const labels = todaysData.map((data) => data.date);
-  const data = todaysData.map((data) => data["4. close"]);
+  console.log(newTimeSeries);
+
+  const labels = Object.keys(newTimeSeries).map(
+    (key) => `${new Date(key).getHours()}`
+  );
+  const data = Object.entries(newTimeSeries).map((data) => data[1]["4. close"]);
   return {
     data,
     labels,
