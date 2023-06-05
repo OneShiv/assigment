@@ -77,6 +77,9 @@ const originalData = {
 };
 
 export const intraDayData = {
+  "Meta Data": {
+    "3. Last Refreshed": "03-02-2023 00:00:00",
+  },
   "Time Series (60min)": originalData,
 };
 

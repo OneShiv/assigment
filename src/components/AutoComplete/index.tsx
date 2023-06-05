@@ -17,7 +17,7 @@ function AutoComplete(props: AutoCompleteProps) {
       case Keys.ESCAPE:
         setShowOptions(false);
       case Keys.ARROW_UP:
-        if (optionIndex === 0) {
+        if (optionIndex === 0 || optionIndex === -1) {
           setOptionIndex(props.options.length - 1);
         } else {
           setOptionIndex((prev) => prev - 1);

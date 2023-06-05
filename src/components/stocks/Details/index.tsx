@@ -25,15 +25,19 @@ function StockDetails() {
 
   const {
     data: stockOverview,
-    error: getStockError,
-    isLoading: getStocksLoading,
+    error: stockOverviewError,
+    isLoading: stockOverviewLoading,
   } = useSWR<StockOverview, Error>(
     params.id ? `${GET_STOCK_OVERVIEW}&symbol=${params.id}` : null,
     () => fetch(GET_STOCK_OVERVIEW, `&symbol=${params.id}`)
   );
 
-  console.log(stockOverview);
-
+  console.log(
+    "stock overview",
+    stockOverviewError,
+    stockOverviewLoading,
+    stockOverview
+  );
   const {
     data: stockIntradayData,
     error: stockIntradayDataError,
@@ -48,8 +52,6 @@ function StockDetails() {
       : undefined
   );
 
-  console.log(stockIntradayData);
-
   const {
     data: globalQuoteData,
     error: globalQuoteError,
@@ -61,19 +63,26 @@ function StockDetails() {
 
   const { labels, data: _data } =
     transformStockIntradayForChart(stockIntradayData);
-  console.log(stockIntradayData, globalQuoteData, labels, _data);
 
-  if (getStocksLoading || stockIntradayDataLoading || globalQuoteLoading) {
+  if (
+    stockIntradayDataLoading ||
+    stockIntradayDataLoading ||
+    globalQuoteLoading
+  ) {
     return <div>Loading ...</div>;
   }
+  if (stockOverviewError || stockIntradayDataError || globalQuoteError) {
+    return <div>Oops some Error Occured !</div>;
+  }
 
-  if (getStocksLoading || stockIntradayData?.Note || globalQuoteData?.Note) {
+  if (!stockOverview || stockIntradayData?.Note || globalQuoteData?.Note) {
     return (
       <div>
         <p>API limit exhausted</p>
       </div>
     );
   }
+
   const data: LineChartData = {
     labels: labels.reverse(),
     datasets: [
@@ -173,12 +182,6 @@ function StockDetails() {
             />
           </section>
         </>
-      )}
-      {getStockError && (
-        <section className="stock-details-error">
-          <p>Oops! unable to fetch stock details now</p>
-          <p>please try after some time or with another symbol search</p>
-        </section>
       )}
     </Card>
   );

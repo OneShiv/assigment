@@ -1,6 +1,6 @@
 import React from "react";
 import { screen, render, waitFor } from "@testing-library/react";
-import StockSearchLayout from "../../../src/components/StockSearchLayout";
+import StockSearchLayout from "../../../../src/components/stocks/SearchLayout";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -42,12 +42,14 @@ const responseData = {
 
 describe("[Component : StockSearchlayout]", () => {
   const server = setupServer(
-    rest.get(
-      "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=ts&apikey=8GALZMDWN2NE2S1T",
-      (req, res, ctx) => {
+    rest.get("https://www.alphavantage.co/query", (req, res, ctx) => {
+      const fnId = req.url.searchParams.get("function");
+      if (fnId === "SYMBOL_SEARCH") {
         return res(ctx.json(responseData));
+      } else {
+        return res(ctx.json({}));
       }
-    )
+    })
   );
   beforeAll(() => server.listen());
   afterAll(() => server.close());

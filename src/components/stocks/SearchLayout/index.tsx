@@ -14,10 +14,8 @@ function StocksSearchLayout() {
   const debouncedInputValue = useDebounce(inputValue, 300);
 
   const navigate = useNavigate();
-  console.log(stocksList);
 
   useEffect(() => {
-    console.log(debouncedInputValue);
     if (debouncedInputValue.length >= 3) {
       fetch(GET_MATCHING_STOCKS, `&keywords=${debouncedInputValue}`).then(
         (resp: StockSearchResponse) => {

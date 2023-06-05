@@ -40,10 +40,10 @@
     "typescript": "4.4.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3010 react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "test:j": "jest",
+    "test": "jest",
+    "test:report": "jest --coverage",
     "eject": "react-scripts eject"
   },
   "browserslist": [
