@@ -33,8 +33,6 @@ export const transformStockIntradayForChart = (
     newTimeSeries[timeKeys[i]] = timelyData[timeKeys[i]];
   }
 
-  console.log(newTimeSeries);
-
   const labels = Object.keys(newTimeSeries).map(
     (key) => `${new Date(key).getHours()}`
   );

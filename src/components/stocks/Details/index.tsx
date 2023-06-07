@@ -32,12 +32,6 @@ function StockDetails() {
     () => fetch(GET_STOCK_OVERVIEW, `&symbol=${params.id}`)
   );
 
-  console.log(
-    "stock overview",
-    stockOverviewError,
-    stockOverviewLoading,
-    stockOverview
-  );
   const {
     data: stockIntradayData,
     error: stockIntradayDataError,
@@ -61,16 +55,24 @@ function StockDetails() {
     () => fetch(GET_GLOBAL_QUOTE, `&symbol=${params.id}`)
   );
 
-  const { labels, data: _data } =
-    transformStockIntradayForChart(stockIntradayData);
+  console.log(
+    "stock overview",
+    stockOverview,
+    globalQuoteData,
+    stockIntradayData
+  );
 
   if (
-    stockIntradayDataLoading ||
-    stockIntradayDataLoading ||
-    globalQuoteLoading
+    !stockOverview ||
+    !globalQuoteData ||
+    !stockIntradayData ||
+    stockOverview["Error Message"] ||
+    globalQuoteData["Error Message"] ||
+    stockIntradayData["Error Message"]
   ) {
-    return <div>Loading ...</div>;
+    return <div>No data for this search result</div>;
   }
+
   if (stockOverviewError || stockIntradayDataError || globalQuoteError) {
     return <div>Oops some Error Occured !</div>;
   }
@@ -83,7 +85,9 @@ function StockDetails() {
     );
   }
 
-  console.log({ data: _data, labels });
+  const { labels, data: _data } =
+    transformStockIntradayForChart(stockIntradayData);
+
   const data: LineChartData = {
     labels: labels.reverse(),
     datasets: [

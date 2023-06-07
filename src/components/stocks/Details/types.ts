@@ -1,4 +1,5 @@
 export type StockOverview = {
+  "Error Message"?: string;
   Name: string;
   Symbol: string;
   Description: string;
@@ -10,11 +11,13 @@ export type StockOverview = {
 };
 
 export type GlobalQuoteResp = {
+  "Error Message"?: string;
   Note?: string;
   ["Global Quote"]: GlobalQuote;
 };
 
 export type GlobalQuote = {
+  "Error Message"?: string;
   "01. symbol": string;
   "02. open": string;
   "03. high": string;
@@ -40,6 +43,7 @@ export type StockSeries = {
 };
 
 export type IntraDayResponse = {
+  "Error Message"?: string;
   Note?: string;
   "Meta Data": {
     "3. Last Refreshed": string;

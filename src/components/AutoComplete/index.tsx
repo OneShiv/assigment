@@ -82,7 +82,7 @@ function AutoComplete(props: AutoCompleteProps) {
           className="search-input"
           list="search-results"
         />
-        <IconButton>
+        <IconButton onClick={() => props.setSelectedValue(searchText)}>
           <Search />
         </IconButton>
       </div>
