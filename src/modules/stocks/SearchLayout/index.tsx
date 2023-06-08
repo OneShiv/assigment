@@ -4,7 +4,7 @@ import { fetch } from "../../../api";
 import { GET_MATCHING_STOCKS } from "../../../api/constants";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { Stock, StockSearchResponse } from "./types";
-import StocksACHOC from "../../../hocs/AutoCompleteHoc";
+import StocksAutoCompleteHOC from "../../../hocs/AutoCompleteHoc";
 
 function StocksSearchLayout() {
   const [inputValue, setInputValue] = useState<string>("");
@@ -31,7 +31,7 @@ function StocksSearchLayout() {
       <section>
         <h1>Stocks Screener</h1>
         <section className="stocks-search">
-          <StocksACHOC
+          <StocksAutoCompleteHOC
             setValue={setInputValue}
             value={inputValue}
             label="Find a Symbol"

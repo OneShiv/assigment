@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { transformStockIntradayForChart } from "../utils";
+import { transformStockIntraDayDataForChart } from "../utils";
 import { LineChartData } from "../components/charts/LineChart/types";
 import {
   GlobalQuoteResp,
   IntraDayResponse,
-} from "../components/stocks/Details/types";
+} from "../modules/stocks/Details/types";
 import LineChart from "../components/charts/LineChart";
 
 type LineChartStockHocProps = {
@@ -18,7 +18,7 @@ function LineChartHoc(props: LineChartStockHocProps) {
     secondaryData &&
     !secondaryData["Note"] &&
     secondaryData["Global Quote"]["08. previous close"];
-  const { labels, data: _data } = transformStockIntradayForChart(primaryData);
+  const { labels, data: _data } = transformStockIntraDayDataForChart(primaryData);
 
   const data: LineChartData = useMemo(() => {
     return {

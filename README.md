@@ -1,6 +1,6 @@
-# Intuit Assignment
+# Assignment
 
-Assigment problem involves creating a autocomplete widget for searching stocks symbol and user will be able to search and perfoem various actions on it.
+Assigment problem involves creating a autocomplete widget for searching stocks symbol and user will be able to search and perform various actions on it.
 
 ## How to run ?
 

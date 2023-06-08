@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { GET_GLOBAL_QUOTE, GET_STOCK_OVERVIEW } from "../../../api/constants";
 import { fetch } from "../../../api";
 import { GlobalQuoteResp, StockOverview } from "./types";
-import Card from "../../common/Card";
+import Card from "../../../components/common/Card";
 import LineChartWrapper from "./LineChartWrapper";
 import MoreDetails from "./MoreDetails";
 
@@ -54,7 +54,7 @@ function StockDetails() {
   }
 
   if (stockOverviewError || globalQuoteError) {
-    return <div>Oops some Error Occured !</div>;
+    return <div>Oops some Error Occurred !</div>;
   }
 
   if (stockOverview?.Note) {
@@ -65,13 +65,13 @@ function StockDetails() {
     );
   }
 
-  const isDataVisile = !(
+  const isDataVisible = !(
     stockOverview?.Note || stockOverview?.["Error Message"]
   );
 
   return (
     <Card>
-      {isDataVisile && stockOverview && (
+      {isDataVisible && stockOverview && (
         <>
           <div className="stock-heading">
             <h2>

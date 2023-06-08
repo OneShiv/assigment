@@ -1,10 +1,7 @@
-import {
-  IntraDayResponse,
-  StockSeries,
-} from "../components/stocks/Details/types";
-import { Stock } from "../components/stocks/SearchLayout/types";
+import { IntraDayResponse, StockSeries } from "../modules/stocks/Details/types";
+import { Stock } from "../modules/stocks/SearchLayout/types";
 
-export const transformStockIntradayForChart = (
+export const transformStockIntraDayDataForChart = (
   intraDayDataResp: IntraDayResponse | undefined
 ) => {
   const intraDayData =

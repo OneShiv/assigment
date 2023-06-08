@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
-import { GET_STOCK_INTRADAY, INTERVAL_ONE_HOUE } from "../../../api/constants";
+import { GET_STOCK_INTRADAY, INTERVAL_ONE_HOUR } from "../../../api/constants";
 import { fetch } from "../../../api";
 import { IconButton } from "@mui/material";
 import Refresh from "@mui/icons-material/Refresh";
@@ -9,7 +9,11 @@ import { GlobalQuoteResp, IntraDayResponse } from "./types";
 import LineChartHoc from "../../../hocs/LineChartHoc";
 import React from "react";
 
-function LineChartWrapper({globalQuoteData}:{globalQuoteData?:GlobalQuoteResp}) {
+function LineChartWrapper({
+  globalQuoteData,
+}: {
+  globalQuoteData?: GlobalQuoteResp;
+}) {
   const [refreshInterval, setRefreshInterval] = React.useState(0);
   const [isAutoRefreshOn, setAutoRefreshOn] = React.useState(false);
 
@@ -21,9 +25,9 @@ function LineChartWrapper({globalQuoteData}:{globalQuoteData?:GlobalQuoteResp}) 
     isLoading: stockIntradayDataLoading,
   } = useSWR<IntraDayResponse, Error>(
     params.id
-      ? `${GET_STOCK_INTRADAY}${INTERVAL_ONE_HOUE}&symbol=${params.id}`
+      ? `${GET_STOCK_INTRADAY}${INTERVAL_ONE_HOUR}&symbol=${params.id}`
       : null,
-    () => fetch(GET_STOCK_INTRADAY, `${INTERVAL_ONE_HOUE}&symbol=${params.id}`),
+    () => fetch(GET_STOCK_INTRADAY, `${INTERVAL_ONE_HOUR}&symbol=${params.id}`),
     refreshInterval && isAutoRefreshOn
       ? { refreshInterval: refreshInterval, revalidateOnFocus: false }
       : { revalidateOnFocus: false }
@@ -39,7 +43,7 @@ function LineChartWrapper({globalQuoteData}:{globalQuoteData?:GlobalQuoteResp}) 
   }
 
   if (stockIntradayDataError) {
-    return <div>Oops some Error Occured !</div>;
+    return <div>Oops some Error Occurred !</div>;
   }
 
   if (stockIntradayData?.Note) {
@@ -89,4 +93,4 @@ function LineChartWrapper({globalQuoteData}:{globalQuoteData?:GlobalQuoteResp}) 
   );
 }
 
-export default LineChartWrapper
+export default LineChartWrapper;

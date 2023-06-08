@@ -1,13 +1,13 @@
 import {
   stocksDataTransformer,
-  transformStockIntradayForChart,
+  transformStockIntraDayDataForChart,
 } from "../../src/utils";
 describe("[Function : StocksDataTransformer]", () => {
   it("should return empty array if function provided with empty array", () => {
     expect(stocksDataTransformer([])).toHaveLength(0);
   });
 
-  it("should return correct data with transfomed values", () => {
+  it("should return correct data with transformed values", () => {
     const originalData = [
       {
         "1. symbol": "TS",
@@ -50,10 +50,10 @@ describe("[Function : StocksDataTransformer]", () => {
   });
 });
 
-describe("[Function : transformStockIntradayForChart]", () => {
-  it("should return empty array if intraday trades data is empty", () => {
+describe("[Function : transformStockIntraDayDataForChart]", () => {
+  it("should return empty array if intra day trades data is empty", () => {
     expect(
-      transformStockIntradayForChart({
+      transformStockIntraDayDataForChart({
         "Meta Data": {
           "3. Last Refreshed": "03-02-2023 00:00:00",
         },
@@ -99,7 +99,7 @@ describe("[Function : transformStockIntradayForChart]", () => {
         },
       },
     };
-    const expectedValue = transformStockIntradayForChart(originalData);
+    const expectedValue = transformStockIntraDayDataForChart(originalData);
     expect(expectedValue.labels.length).toBeLessThan(
       Object.keys(originalData).length
     );

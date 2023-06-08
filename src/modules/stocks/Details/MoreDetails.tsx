@@ -1,4 +1,4 @@
-import LabelValue from "../../common/LabelValue";
+import LabelValue from "../../../components/common/LabelValue";
 import { GlobalQuoteResp, StockOverview } from "./types";
 
 function MoreDetails({

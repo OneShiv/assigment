@@ -9,4 +9,4 @@ export const KEY = "&apikey=N8TOV18D8REYIST0";
 export const KEY2 = "&apikey=8GALZMDWN2NE2S1T";
 export const KEY3 = "&apikey=AJJ8Z7R3VHXJAOC0";
 
-export const INTERVAL_ONE_HOUE = "&interval=60min";
+export const INTERVAL_ONE_HOUR = "&interval=60min";

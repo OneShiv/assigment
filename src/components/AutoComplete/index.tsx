@@ -30,7 +30,6 @@ function AutoComplete(props: AutoCompleteProps) {
         break;
       case Keys.ENTER:
         // preventing submit
-        console.log("i am heer");
         e.preventDefault();
         if (optionIndex > -1) {
           setShowOptions(false);
@@ -59,7 +58,7 @@ function AutoComplete(props: AutoCompleteProps) {
   return (
     <form className="autocomplete">
       <label htmlFor="search">{label}</label>
-      <div className="input-with-searchbtn">
+      <div className="input-with-search-btn">
         <input
           type="text"
           autoComplete="off"
