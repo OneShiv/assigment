@@ -57,7 +57,6 @@ function AutoComplete(props: AutoCompleteProps) {
 
   const onFocus = (e: FocusEvent<HTMLInputElement, Element>) => {
     clearTimeout(timeoutId);
-    setShowOptions(true);
     props.onFocus && props.onFocus(e);
   };
 
@@ -86,17 +85,15 @@ function AutoComplete(props: AutoCompleteProps) {
           <Search />
         </IconButton>
       </div>
-      {showOptions && (
-        <SearchOptions
-          noOptions={searchText !== "" && props.options.length === 0}
-          options={props.options}
-          optionIndex={optionIndex}
-          onClickHandler={(symbol: string) => {
-            props.setSelectedValue(symbol);
-            setSearchText("");
-          }}
-        />
-      )}
+      <SearchOptions
+        noOptions={searchText !== "" && props.options.length === 0}
+        options={searchText !== "" ? props.options : []}
+        optionIndex={optionIndex}
+        onClickHandler={(symbol: string) => {
+          props.setSelectedValue(symbol);
+          setSearchText("");
+        }}
+      />
     </form>
   );
 }

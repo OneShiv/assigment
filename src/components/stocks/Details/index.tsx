@@ -55,12 +55,9 @@ function StockDetails() {
     () => fetch(GET_GLOBAL_QUOTE, `&symbol=${params.id}`)
   );
 
-  console.log(
-    "stock overview",
-    stockOverview,
-    globalQuoteData,
-    stockIntradayData
-  );
+  if (stockOverviewLoading || stockIntradayDataLoading || globalQuoteLoading) {
+    return <div>Loading ...</div>;
+  }
 
   if (
     !stockOverview ||
