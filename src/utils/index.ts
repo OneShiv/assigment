@@ -46,7 +46,6 @@ export const transformStockIntradayForChart = (
 export const stocksDataTransformer = (stocks: Stock[]) => {
   return stocks.map((stock: Stock) => ({
     symbol: stock["1. symbol"],
-    id: stock["1. symbol"],
     label: `${stock["1. symbol"]} | ${stock["2. name"]}`,
   }));
 };

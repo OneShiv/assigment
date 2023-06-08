@@ -70,4 +70,21 @@ describe("[Component : StockSearchlayout]", () => {
       expect(mockNavigate).toHaveBeenCalledTimes(1);
     });
   });
+
+  it("should render empty if value is cleared", async () => {
+    render(
+      <Router>
+        <StockSearchLayout />
+      </Router>
+    );
+    const inputEl = screen.getByLabelText("Find a Symbol");
+    expect(inputEl).toBeInTheDocument();
+    userEvent.type(inputEl, "ts3");
+    let el = await screen.findByText("TS3E.DEX | TS3E");
+    expect(el).toBeInTheDocument();
+    userEvent.clear(inputEl);
+    await waitFor(() => {
+      expect(el).not.toBeInTheDocument();
+    });
+  });
 });

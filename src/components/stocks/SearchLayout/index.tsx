@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import AutoComplete from "../../AutoComplete";
 import { fetch } from "../../../api";
 import { GET_MATCHING_STOCKS } from "../../../api/constants";
 import { useDebounce } from "../../../hooks/useDebounce";
-import { stocksDataTransformer } from "../../../utils";
 import { Stock, StockSearchResponse } from "./types";
+import StocksACHOC from "../../../hocs/AutoCompleteHoc";
 
 function StocksSearchLayout() {
   const [inputValue, setInputValue] = useState<string>("");
@@ -27,24 +26,26 @@ function StocksSearchLayout() {
     }
   }, [debouncedInputValue]);
 
-  const transformedStocks = stocksDataTransformer(stocksList);
-
-  const onChangeHandler = (newValue: string) => {
-    setInputValue(newValue);
-  };
-
   return (
     <>
       <section>
         <h1>Stocks Screener</h1>
         <section className="stocks-search">
-          <AutoComplete
-            options={transformedStocks}
-            onChange={onChangeHandler}
+          <StocksACHOC
+            setValue={setInputValue}
+            value={inputValue}
             label="Find a Symbol"
-            setSelectedValue={(value) => {
-              navigate(`/${value}`);
+            onEnter={(val?: string) => {
+              if (val && val.length >= 3) {
+                navigate(`/${val}`);
+              } else {
+                console.log("ad");
+                navigate(`/${inputValue}`);
+              }
+              setInputValue("");
+              setStocksList([]);
             }}
+            list={stocksList}
           />
         </section>
         <Outlet />

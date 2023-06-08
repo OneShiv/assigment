@@ -1,4 +1,5 @@
 export type StockOverview = {
+  Note?: string;
   "Error Message"?: string;
   Name: string;
   Symbol: string;

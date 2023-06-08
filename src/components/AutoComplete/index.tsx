@@ -6,11 +6,13 @@ import SearchOptions from "../common/SearchOptions";
 import { Keys } from "./constants";
 
 function AutoComplete(props: AutoCompleteProps) {
-  const [showOptions, setShowOptions] = React.useState(false);
-  const [optionIndex, setOptionIndex] = React.useState(-1);
-  const [searchText, setSearchText] = React.useState("");
+  const { setValue, options, label, onEnter, value } = props;
 
-  let timeoutId: NodeJS.Timeout;
+  const [showOptions, setShowOptions] = React.useState(true);
+  const [optionIndex, setOptionIndex] = React.useState(-1);
+  console.log({ showOptions, options, value });
+  const optionsSize = props.options.length;
+  let timeoutRef = React.useRef<NodeJS.Timeout>();
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
@@ -18,51 +20,45 @@ function AutoComplete(props: AutoCompleteProps) {
         setShowOptions(false);
       case Keys.ARROW_UP:
         if (optionIndex === 0 || optionIndex === -1) {
-          setOptionIndex(props.options.length - 1);
+          setOptionIndex(options.length - 1);
         } else {
           setOptionIndex((prev) => prev - 1);
         }
         break;
       case Keys.ARROW_DOWN:
-        if (optionIndex >= props.options.length - 1) {
-          setOptionIndex(0);
-        } else {
-          setOptionIndex((prev) => prev + 1);
-        }
+        setOptionIndex((prev) => (prev + 1) % optionsSize);
         break;
       case Keys.ENTER:
+        // preventing submit
+        console.log("i am heer");
         e.preventDefault();
         if (optionIndex > -1) {
-          props.onChange && props.onChange(props.options[optionIndex].symbol);
-          props.setSelectedValue(props.options[optionIndex].symbol);
           setShowOptions(false);
+          onEnter(options[optionIndex].symbol);
         } else {
-          props.setSelectedValue(searchText);
+          onEnter();
         }
-        setSearchText("");
       default:
-        props.onKeyDown && props.onKeyDown(e);
+        break;
     }
   };
 
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
-    props.onChange && props.onChange(e.target.value);
-  };
-
   const onBlur = (e: FocusEvent<HTMLInputElement, Element>) => {
-    props.onBlur && props.onBlur(e);
-    timeoutId = setTimeout(() => setShowOptions(false), 1000);
+    timeoutRef.current = setTimeout(() => setShowOptions(false), 1000);
   };
 
   const onFocus = (e: FocusEvent<HTMLInputElement, Element>) => {
-    clearTimeout(timeoutId);
-    props.onFocus && props.onFocus(e);
+    clearTimeout(timeoutRef.current);
+    setShowOptions(true);
+  };
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
   };
 
   return (
     <form className="autocomplete">
-      <label htmlFor="search">{props.label}</label>
+      <label htmlFor="search">{label}</label>
       <div className="input-with-searchbtn">
         <input
           type="text"
@@ -74,26 +70,24 @@ function AutoComplete(props: AutoCompleteProps) {
           aria-owns="search-results"
           aria-autocomplete="list"
           onKeyDown={onKeyDown}
-          onChange={onChangeHandler}
+          onChange={onChange}
           onBlur={onBlur}
           onFocus={onFocus}
-          value={searchText}
+          value={value}
           className="search-input"
           list="search-results"
         />
-        <IconButton onClick={() => props.setSelectedValue(searchText)}>
+        <IconButton onClick={() => onEnter()}>
           <Search />
         </IconButton>
       </div>
-      <SearchOptions
-        noOptions={searchText !== "" && props.options.length === 0}
-        options={searchText !== "" ? props.options : []}
-        optionIndex={optionIndex}
-        onClickHandler={(symbol: string) => {
-          props.setSelectedValue(symbol);
-          setSearchText("");
-        }}
-      />
+      {showOptions && value && options && (
+        <SearchOptions
+          options={options}
+          optionIndex={optionIndex}
+          onClickHandler={onEnter}
+        />
+      )}
     </form>
   );
 }

@@ -7,16 +7,38 @@ import {
   GET_STOCK_INTRADAY,
   INTERVAL_ONE_HOUE,
 } from "../../../api/constants";
-import { transformStockIntradayForChart } from "../../../utils";
 import { fetch } from "../../../api";
 import { IconButton } from "@mui/material";
 import Refresh from "@mui/icons-material/Refresh";
 import Stop from "@mui/icons-material/Stop";
 import { GlobalQuoteResp, IntraDayResponse, StockOverview } from "./types";
-import { LineChartData } from "../../charts/LineChart/types";
 import LabelValue from "../../common/LabelValue";
-import LineChart from "../../charts/LineChart";
 import Card from "../../common/Card";
+import LineChartHoc from "../../../hocs/LineChartHoc";
+
+function checkFallbackUI({
+  stockIntradayDataLoading,
+  stockIntradayData,
+  stockIntradayDataError,
+  globalQuoteData,
+  globalQuoteError,
+  globalQuoteLoading,
+  stockOverview,
+  stockOverviewLoading,
+  stockOverviewError,
+}: any) {
+  console.log({
+    stockIntradayDataLoading,
+    stockIntradayData,
+    stockIntradayDataError,
+    globalQuoteData,
+    globalQuoteError,
+    globalQuoteLoading,
+    stockOverview,
+    stockOverviewLoading,
+    stockOverviewError,
+  });
+}
 
 function StockDetails() {
   const params = useParams();
@@ -29,7 +51,13 @@ function StockDetails() {
     isLoading: stockOverviewLoading,
   } = useSWR<StockOverview, Error>(
     params.id ? `${GET_STOCK_OVERVIEW}&symbol=${params.id}` : null,
-    () => fetch(GET_STOCK_OVERVIEW, `&symbol=${params.id}`)
+    () => {
+      console.log("hello");
+      return fetch(GET_STOCK_OVERVIEW, `&symbol=${params.id}`);
+    },
+    {
+      revalidateOnFocus: false,
+    }
   );
 
   const {
@@ -42,8 +70,8 @@ function StockDetails() {
       : null,
     () => fetch(GET_STOCK_INTRADAY, `${INTERVAL_ONE_HOUE}&symbol=${params.id}`),
     refreshInterval && isAutoRefreshOn
-      ? { refreshInterval: refreshInterval }
-      : undefined
+      ? { refreshInterval: refreshInterval, revalidateOnFocus: false }
+      : { revalidateOnFocus: false }
   );
 
   const {
@@ -52,9 +80,25 @@ function StockDetails() {
     isLoading: globalQuoteLoading,
   } = useSWR<GlobalQuoteResp, Error>(
     params.id ? `${GET_GLOBAL_QUOTE}&symbol=${params.id}` : null,
-    () => fetch(GET_GLOBAL_QUOTE, `&symbol=${params.id}`)
+    () => fetch(GET_GLOBAL_QUOTE, `&symbol=${params.id}`),
+    {
+      revalidateOnFocus: false,
+    }
   );
 
+  console.log(stockOverview, stockIntradayData, globalQuoteData);
+
+  // checkFallbackUI({
+  //   stockOverview,
+  //   stockOverviewLoading,
+  //   stockOverviewError,
+  //   globalQuoteData,
+  //   globalQuoteLoading,
+  //   globalQuoteError,
+  //   stockIntradayData,
+  //   stockIntradayDataError,
+  //   stockIntradayDataLoading,
+  // });
   if (stockOverviewLoading || stockIntradayDataLoading || globalQuoteLoading) {
     return <div>Loading ...</div>;
   }
@@ -67,6 +111,7 @@ function StockDetails() {
     globalQuoteData["Error Message"] ||
     stockIntradayData["Error Message"]
   ) {
+    console.log("here");
     return <div>No data for this search result</div>;
   }
 
@@ -74,7 +119,7 @@ function StockDetails() {
     return <div>Oops some Error Occured !</div>;
   }
 
-  if (!stockOverview || stockIntradayData?.Note || globalQuoteData?.Note) {
+  if (stockOverview?.Note || stockIntradayData?.Note || globalQuoteData?.Note) {
     return (
       <div>
         <p>API limit exhausted</p>
@@ -82,36 +127,18 @@ function StockDetails() {
     );
   }
 
-  const { labels, data: _data } =
-    transformStockIntradayForChart(stockIntradayData);
-
-  const data: LineChartData = {
-    labels: labels.reverse(),
-    datasets: [
-      {
-        label: "Last operating day chart",
-        data: _data.reverse(),
-        fill: true,
-        backgroundColor: "rgba(75,192,192,0.2)",
-        borderColor: "rgba(75,192,192,1)",
-      },
-      {
-        label: "previous closing",
-        data: globalQuoteData
-          ? new Array(_data.length).fill(
-              globalQuoteData["Global Quote"]["08. previous close"]
-            )
-          : [],
-        borderDash: [5],
-        fill: true,
-        borderColor: "rgba(75,16,19,1)",
-      },
-    ],
-  };
+  const isDataVisile = !(
+    stockOverview?.Note ||
+    globalQuoteData?.Note ||
+    stockIntradayData?.Note ||
+    stockOverview?.["Error Message"] ||
+    globalQuoteData?.["Error Message"] ||
+    stockIntradayData?.["Error Message"]
+  );
 
   return (
     <Card>
-      {stockOverview && (
+      {isDataVisile && stockOverview && (
         <>
           <div className="stock-heading">
             <h2>
@@ -155,7 +182,10 @@ function StockDetails() {
                   </em>
                 </p>
               </section>
-              <LineChart data={data} data-test-id="line-chart" />
+              <LineChartHoc
+                primaryData={stockIntradayData}
+                secondaryData={globalQuoteData}
+              />
             </section>
           )}
           <h3>More Details :</h3>

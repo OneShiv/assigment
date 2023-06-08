@@ -36,12 +36,10 @@ describe("[Function : StocksDataTransformer]", () => {
     const expectedValue = [
       {
         symbol: "TS",
-        id: "TS",
         label: "TS | Tenaris S.A.",
       },
       {
         symbol: "TS3E.DEX",
-        id: "TS3E.DEX",
         label: "TS3E.DEX | TS3E",
       },
     ];

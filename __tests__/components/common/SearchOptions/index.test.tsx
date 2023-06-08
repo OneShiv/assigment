@@ -12,16 +12,13 @@ describe("[Component: Search Options", () => {
           {
             label: "label1",
             symbol: "label1",
-            id: "label1",
           },
           {
             label: "label2",
             symbol: "label2",
-            id: "label2",
           },
         ]}
         optionIndex={-1}
-        noOptions={false}
         onClickHandler={mockClickHandler}
       />
     );
@@ -32,23 +29,11 @@ describe("[Component: Search Options", () => {
       expect(mockClickHandler).toHaveBeenCalled();
     });
   });
-  it("should not show if  noOptions field is true", () => {
+  it("should not show if no options", () => {
     render(
       <SearchOptions
-        options={[
-          {
-            label: "label1",
-            symbol: "label1",
-            id: "label1",
-          },
-          {
-            label: "label2",
-            symbol: "label2",
-            id: "label2",
-          },
-        ]}
+        options={[]}
         optionIndex={-1}
-        noOptions={true}
         onClickHandler={mockClickHandler}
       />
     );
