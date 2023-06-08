@@ -9,13 +9,15 @@ import LineChart from "../components/charts/LineChart";
 
 type LineChartStockHocProps = {
   primaryData: IntraDayResponse;
-  secondaryData: GlobalQuoteResp;
+  secondaryData?: GlobalQuoteResp;
 };
 
 function LineChartHoc(props: LineChartStockHocProps) {
   const { primaryData, secondaryData } = props;
   const _secData =
-    secondaryData && secondaryData["Global Quote"]["08. previous close"];
+    secondaryData &&
+    !secondaryData["Note"] &&
+    secondaryData["Global Quote"]["08. previous close"];
   const { labels, data: _data } = transformStockIntradayForChart(primaryData);
 
   const data: LineChartData = useMemo(() => {
