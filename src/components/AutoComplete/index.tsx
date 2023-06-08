@@ -10,7 +10,6 @@ function AutoComplete(props: AutoCompleteProps) {
 
   const [showOptions, setShowOptions] = React.useState(true);
   const [optionIndex, setOptionIndex] = React.useState(-1);
-  console.log({ showOptions, options, value });
   const optionsSize = props.options.length;
   let timeoutRef = React.useRef<NodeJS.Timeout>();
 
@@ -58,7 +57,7 @@ function AutoComplete(props: AutoCompleteProps) {
   return (
     <form className="autocomplete">
       <label htmlFor="search">{label}</label>
-      <div className="input-with-search-btn">
+      <div className="autocomplete-inputWithSearchBtn">
         <input
           type="text"
           autoComplete="off"
@@ -73,7 +72,7 @@ function AutoComplete(props: AutoCompleteProps) {
           onBlur={onBlur}
           onFocus={onFocus}
           value={value}
-          className="search-input"
+          className="autocomplete-searchInput"
           list="search-results"
         />
         <IconButton onClick={() => onEnter()}>

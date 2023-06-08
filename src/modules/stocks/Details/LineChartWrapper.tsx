@@ -38,7 +38,6 @@ function LineChartWrapper({
   }
 
   if (!stockIntradayData || stockIntradayData["Error Message"]) {
-    console.log("here");
     return <div>No data for this search result</div>;
   }
 
@@ -55,11 +54,11 @@ function LineChartWrapper({
   }
   return (
     <section className="stock-chart">
-      <section className="refresh-data">
+      <section className="refreshData">
         <div className="inputs">
           <span>Refresh after(sec):</span>
           <input
-            className="refresh-interval-input"
+            className="refreshIntervalInput"
             type="number"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setRefreshInterval(+e.target.value * 1000)

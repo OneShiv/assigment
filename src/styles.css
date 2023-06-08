@@ -36,7 +36,7 @@ h2 {
   margin-top: 1rem;
 }
 
-.refresh-interval-input {
+.refreshIntervalInput {
   border: 0;
   border-bottom: 1px solid black;
   padding: 0.875rem;
@@ -47,55 +47,55 @@ h2 {
 
 /* Layout Start */
 
-.stocks-search {
+.stocksSearch {
   margin: 2rem 0;
 }
 
 /* Layout Ends */
 
-.align-left {
+.alignLeft {
   text-align: left;
 }
 
-.label-value-row {
+.alignValueRow {
   padding: 1rem;
   display: flex;
   gap: 1rem;
 }
 
-.label-value-row div:nth-of-type(1) {
+.alignValueRow div:nth-of-type(1) {
   flex: 1;
 }
-.label-value-row div:nth-of-type(2) {
+.alignValueRow div:nth-of-type(2) {
   flex: 3;
 }
 
 /* Stock details start*/
-.stock-details {
+.stockDetails {
   display: flex;
   flex-direction: column;
   margin-top: 1.5rem;
 }
-.refresh-data {
+.refreshData {
   display: flex;
   flex-direction: column;
   margin-top: 1.5rem;
 }
-.refresh-data p,
+.refreshData p,
 .inputs {
   align-self: flex-end;
 }
-.refresh-data .inputs {
+.refreshData .inputs {
   display: flex;
   margin-bottom: 1rem;
   align-items: flex-end;
   gap: 0.2rem;
 }
-.stock-details .card:first-of-type {
+.stockDetails .card:first-of-type {
   order: 1;
 }
 
-.stock-details .card:nth-of-type(2) {
+.stockDetails .card:nth-of-type(2) {
   order: 0;
 }
 
@@ -105,7 +105,7 @@ h2 {
   gap: 1rem;
 }
 
-.stock-chart .refresh-data-inputs {
+.stock-chart .refreshDataInputs {
   align-self: flex-end;
 }
 
@@ -115,7 +115,7 @@ h2 {
   gap: 1rem;
 }
 
-.stock-details-data {
+.stockDetailsData {
   border: 1px solid black;
 }
 .card h3 {
@@ -123,7 +123,7 @@ h2 {
   margin-top: 2rem;
 }
 @media only screen and (min-width: 768px) {
-  .stock-details {
+  .stockDetails {
     display: grid;
     grid-template-columns: 48% 48%;
     gap: 1rem 0.5rem;
@@ -152,7 +152,7 @@ h2 {
   border-radius: 0;
 }
 
-.autocomplete .input-with-search-btn {
+.autocomplete .autocomplete-inputWithSearchBtn {
   display: flex;
   margin-top: 0.25rem;
 }
@@ -190,10 +190,6 @@ h2 {
   background-color: #039dae;
 }
 
-.visually-hidden {
-  visibility: hidden;
-}
-
 .active {
   background-color: #009dcf;
   color: white;
@@ -212,7 +208,7 @@ h2 {
 }
 /* Card component End*/
 
-.chart-wrapper {
+.chartWrapper {
   min-width: 300px;
   max-width: 1000px;
   margin: auto;

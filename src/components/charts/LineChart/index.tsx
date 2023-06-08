@@ -23,7 +23,7 @@ ChartJS.register(
 
 function LineChart({ data }: { data: LineChartData }) {
   return (
-    <div className="chart-wrapper">
+    <div className="chartWrapper">
       <Line data={data} data-testid="line-chart" />
     </div>
   );

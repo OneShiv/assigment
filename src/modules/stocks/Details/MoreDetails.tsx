@@ -12,7 +12,7 @@ function MoreDetails({
   return (
     <>
       <h3>More Details :</h3>
-      <section className="stock-details-data">
+      <section className="stockDetails-data">
         <LabelValue
           label="Current Price"
           value={

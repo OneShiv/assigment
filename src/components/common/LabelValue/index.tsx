@@ -1,6 +1,6 @@
 function LabelValue({ label, value }: { label: string; value: string }) {
   return (
-    <div className="label-value-row align-left">
+    <div className="alignValueRow alignLeft">
       <div>
         <em>{label}</em>
       </div>

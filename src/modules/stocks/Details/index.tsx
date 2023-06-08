@@ -17,7 +17,6 @@ function StockDetails() {
   } = useSWR<StockOverview, Error>(
     params.id ? `${GET_STOCK_OVERVIEW}&symbol=${params.id}` : null,
     () => {
-      console.log("hello");
       return fetch(GET_STOCK_OVERVIEW, `&symbol=${params.id}`);
     },
     {
@@ -49,7 +48,6 @@ function StockDetails() {
     stockOverview["Error Message"] ||
     globalQuoteData["Error Message"]
   ) {
-    console.log("here");
     return <div>No data for this search result</div>;
   }
 
